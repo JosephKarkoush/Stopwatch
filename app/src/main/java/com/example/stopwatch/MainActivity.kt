@@ -59,12 +59,37 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+
+    override fun onPause() {
+        super.onPause()
+        if(running) {
+            saveOffset()
+            stopwatch.stop()
+        }
+    }
+
+
+
+    override fun onResume() {
+        super.onResume()
+        if(running){
+            setBaseTime()
+            stopwatch.start()
+            offset=0
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+    }
+
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
         savedInstanceState.putLong(OFFSET_KEY,offset)
         savedInstanceState.putBoolean(RUNNING_KEY, running)
         savedInstanceState.putLong(BASE_KEY, stopwatch.base)
         super.onSaveInstanceState(savedInstanceState)
     }
+
 
     fun setBaseTime(){
         stopwatch.base = SystemClock.elapsedRealtime() - offset
